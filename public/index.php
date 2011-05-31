@@ -23,8 +23,8 @@ require 'inc/functions.php';
 $registry = MVC_Registry::getReg();
 
 # Connect to DB
-$db = new Mongo();
-
+$mongo = new Mongo();
+$db = $mongo->tracker;
 $registry->set('db', $db);
 
 # Load template object

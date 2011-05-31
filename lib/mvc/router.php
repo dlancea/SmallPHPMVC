@@ -1,13 +1,32 @@
 <?php
-Class MVC_Router {
-	private $registry;
-	private $controller_path;
-	private $args = array ();
+/**
+ * Contains MVC_Router class
+ */
 
-	function __construct() {
-		$this->registry = MVC_Registry::getReg();
+/**
+ * Routes the execution of a page load to the appropreate controller method, based
+ * on GET parameters.
+ * 
+ * @author David Lancea
+ */
+Class MVC_Router {
+
+	protected $get_var_name = 'url';
+	protected $controller_path = 'controller/';
+
+	/**
+	 * Constructor
+	 * 
+	 */
+	function __construct($options = array()) {
+		$this->get_var_name = $options['get_var_name'] ?: $this->get_var_name;
+		$this->controller_path = $options['controller_path'] ?: $this->controller_path;
 	}
 
+	/**
+	 * Set path to controllers. Default is ./controller/
+	 * @param type $path 
+	 */
 	function setPath($path) {
 		$path = rtrim($path, '/\\');
 		$path .= DIRSEP;
@@ -16,81 +35,77 @@ Class MVC_Router {
 			throw new Exception('Invalid controller path: `' . $path . '`');
 		}
 
-		$this->path = $path;
+		$this->controller_path = $path;
 	}
 
-	function getArg($key) {
-		if ( !isset($this->args[$key]) ) {
-			return null;
-		}
-		return $this->args[$key];
-	}
-
+	/**
+	 * Determine the controller and action path, then load and execute that action, passing 
+	 * any additional vairables to it.
+	 * 
+	 */
 	function delegate() {
-		// Analyze route (these args are pbr)
-		$this->getController($file, $controller, $action, $args);
+		// Analyze route
+		$route = $this->decodeRoute( $_GET[$this->get_var_name] );
 
 		// File available?
-		if (is_readable($file) == false) {
+		if (is_readable($route['file']) == false) {
 			$this->notFound('no-file');
 		}
 
 		// Always include base controller
-		require_once($this->path . DIRSEP . 'base.php');
+		require_once($this->controller_path . DIRSEP . 'base.php');
 
 		// Include the file
-		include_once($file);
+		include_once($route['file']);
 
 		// Initiate the class
-		$class = 'Controller_' . $controller;
-		$controller = new $class ($this->registry);
+		$class = 'Controller_' . $route['controller'];
+		$controller_obj = new $class();
 
 		// Action available?
-		if (is_callable(array ($controller,	$action )) == false) {
+		if (is_callable(array ($controller_obj,	$route['action'] )) == false) {
 			$this->notFound('no-action');
 		}
 
-		// Run action, esentailly does this: $controller->$action($args[0], $args[1], ...);
-		// TODO -- How many arguments are expected? Give error if not enough (or too many) arguments given
-		$method = new ReflectionMethod($controller, $action);
+		// Check for number of arguments
+		$method = new ReflectionMethod($controller_obj, $route['action']);
 		
-		$number_of_args = count($args);
+		$number_of_args = count($route['additional_arguments']);
 		if( $number_of_args < $method->getNumberOfRequiredParameters() ){
-			throw new Exception('Not enough arguments given to controller');
+			throw new Exception('Not enough arguments given to controller. ' . $method->getNumberOfRequiredParameters() . ' required.');
 		}
 		if( $number_of_args > $method->getNumberOfParameters() ){
-			throw new Exception('Too many arguments given to controller');
+			throw new Exception('Too many arguments given to controller. ' . $method->getNumberOfParameters() . ' expected.');
 		}
 		
-		call_user_func_array(array($controller, $action), $args);
+		// Run action, esentailly does this: $controller_obj->$route['action']($args[0], $args[1], ...);
+		call_user_func_array(array($controller_obj, $route['action']), $route['additional_arguments']);
 	}
 
-	private function extractArgs($args) {
-		if (count($args) == 0) {
-			return false;
-		}
-		$this->args = $args;
-	}
-
-	private function getController(& $file, & $controller, & $action, & $args) {
-		$route = (empty ($_GET['r'])) ? '' : $_GET['r'];
-
-		if (empty ($route)) {
-			$route = 'index';
-		}
-
+	/**
+	 * Used to determine controller file, controller name, action name, and additional arguments
+	 * for requested URL
+	 * 
+	 * @param string A partial URI for a controller, action, and additional parameters separated by
+	 * forward slashes. Example: controller/action/param1/param2
+	 * @return array Associative array containing:
+	 * 'file', 'controller', 'action', 'additional_arguments' 
+	 */
+	private function decodeRoute($route) {
 		// Get separate parts
 		$route = trim($route, '/\\');
 		$parts = explode('/', $route);
 
-		// Find right controller
-		$cmd_path = $this->path;
+		// Controller might be in a subdirectory of controller dir. This will search down the
+		// array of routing "parts" till it either finds a matching file
+		$current_path = $this->controller_path;
+		$controller = '';
 		foreach ($parts as $part) {
-			$fullpath = $cmd_path . $part;
+			$fullpath = $current_path . $part;
 
 			// Is there a dir with this path?
 			if (is_dir($fullpath)) {
-				$cmd_path .= $part . DIRSEP;
+				$current_path .= $part . DIRSEP;
 				array_shift($parts);
 				continue;
 			}
@@ -103,18 +118,26 @@ Class MVC_Router {
 			}
 		}
 
-		if (empty ($controller)) {
-			$controller = 'index';
-		};
-
 		// Get action
 		$action = array_shift($parts);
-		if (empty ($action)) {
-			$action = 'index';
-		}
 
-		$file = $cmd_path . $controller . '.php';
+		// Set default $controller to index
+		if(!$controller)
+			$controller = 'index';
+		
+		// Set default $action to index
+		if(!$action)
+			$action = 'index';
+
+
 		$args = $parts;
+		
+		$return['controller'] = $controller;
+		$return['action'] = $action;
+		$return['additional_arguments'] = $parts;
+		$return['file'] = $current_path . $controller . '.php';
+		
+		return $return;
 	}
 
 	private function notFound() {

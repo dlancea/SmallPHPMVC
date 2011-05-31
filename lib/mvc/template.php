@@ -1,33 +1,59 @@
 <?php
+/**
+ * Contains the MVC_Template class
+ * 
+ */
 
-Class MVC_Template {
+/**
+ * A simple template engine. 
+ * 
+ * The set function sets variable used by the template.
+ * The remove function removes previously set variables.
+ * The show function includes the template code into its own scope and and displays the template.
+ * 
+ * @author David Lancea
+ */
+class MVC_Template {
 	private $_registry;
 
 	function __construct() {
 		$this->_registry = MVC_Registry::getReg();
 	}
 
+	/**
+	 * Sets variable used by the template.
+	 * 
+	 * @param string $varname
+	 * @param mixed $value
+	 * @param booliean $overwrite Allow overwrite of previously set variable
+	 */
 	function set($varname, $value, $overwrite=false) {
 		if (isset($this->$varname) == true AND $overwrite == false) {
-			trigger_error ('Unable to set var `' . $varname . '`. Already set, and overwrite not allowed.', E_USER_NOTICE);
-			return false;
+			throw new Exception ('Unable to set var `' . $varname . '`. Already set, and overwrite not allowed.');
 		}
 
 		$this->$varname = $value;
-		return true;
 	}
 
+	/**
+	 * Removes a previously set variable
+	 *
+	 * @param string $varname
+	 */
 	function remove($varname) {
 		unset($this->$varname);
-		return true;
 	}
 
+	/**
+	 * Includes the template code into its own scope and and displays the template.
+	 * 
+	 * @param string $name 
+	 */
 	function show($name) {
 		$path = SITE_PATH . 'template' . DIRSEP . $name . '.php';
 
 		if (file_exists($path) == false) {
-			trigger_error ('Template `' . $name . '` does not exist.', E_USER_NOTICE);
-			return false;
+			throw new Exception ('Template `' . $name . '` does not exist.' );
 		}
 
 		include ($path);		
