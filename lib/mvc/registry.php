@@ -1,5 +1,30 @@
 <?php
+/**
+ * Contains MVC_Registry class
+ * 
+ */
 
+/**
+ * A singleton registry class which can hold application-wide settings.
+ * 
+ * Example:
+ * <code>
+ *	$registry = MVC_Registry::getReg();
+ *	$db = <db setup>;
+ *	$registry->set('db', $db);
+ *	OR
+ *	$registry['db'] = $db;
+ * 
+ * 
+ *	// Somewhere else in the application...
+ *	$registry = MVC_Registry::getReg();
+ *	$db = $registry->get('db');
+ *	OR
+ *	$db = $registry['db'];
+ * </code>
+ * 
+ * @author David Lancea
+ */
 Class MVC_Registry Implements ArrayAccess {
 	private $vars = array();
 	private static $instance = null;
