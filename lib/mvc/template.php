@@ -50,7 +50,7 @@ class MVC_Template {
 	 * @param string $name 
 	 */
 	function show($name) {
-		$path = SITE_PATH . 'template' . DIRSEP . $name . '.php';
+		$path = TEMPLATE_PATH . DIRSEP . $name . '.html.php';
 
 		if (file_exists($path) == false) {
 			throw new Exception ('Template `' . $name . '` does not exist.' );
