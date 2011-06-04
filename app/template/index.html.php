@@ -8,6 +8,6 @@
 	<script src="js/index.js" type="text/javascript"></script>
 </head>
 <body>
-	Howdy!
+	Howdy! This is an example template. Values set in the template can be loaded using the <code>$this->[param]<code> syntax.
 </body>
 </html>
