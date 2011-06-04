@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-	<title>Bookmarks</title>
-	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<title>App title</title>
+	<link rel="stylesheet" href="css/boilerplate/screen.css" type="text/css" media="screen" charset="utf-8"> 
+	<link rel="stylesheet" href="css/boilerplate/print.css" type="text/css" media="print" charset="utf-8"> 
+	<!--[if lte IE 6]><link rel="stylesheet" href="stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"><![endif]--> 
+<!--
+	<link rel="stylesheet" href="css/app.css" type="text/css" />
+-->
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js" type="text/javascript"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.js" type="text/javascript"></script>
-	<script src="js/index.js" type="text/javascript"></script>
+<!--
+	<script src="js/app.js" type="text/javascript"></script>
+-->
 </head>
 <body>
-	Howdy! This is an example template. Values set in the template can be loaded using the <code>$this->[param]</code> syntax.
+	<h1>Howdy!</h1>
+	<p>This is an example template. Values set in the template can be loaded using the <code>$this->[param]</code> syntax.</p>
 </body>
 </html>
