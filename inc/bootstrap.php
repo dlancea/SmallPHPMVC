@@ -20,8 +20,12 @@ require SITE_PATH . 'inc/functions.php';
 $registry = MVC_Registry::getReg();
 
 # Connect to DB
-$mongo = new Mongo();
-$db = $mongo->tracker;
+// Setup DB here... or don't
+// $db = new PDO('mysql:host=myhost;dbname=mydb', 'login', 'password'); 
+// OR
+// $mongo = new Mongo();
+// $db = $mongo->mongo_db;
+$db = null;
 $registry->set('db', $db);
 
 # Load template object
