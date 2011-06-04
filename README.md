@@ -9,6 +9,7 @@ What's included?
 ----------------
 
 Essentially, the bulk of the code (and by bulk I mean a few hundred lines) is in the 3 library classes:
+
 * MVC_Router, which routes the application to the appropriate controller/action.
 * MVC_Template, which allows template files to be loaded with access to data specifically set in the class.
 * MVC_Registry, which provides system-wide configuration and resource access.
