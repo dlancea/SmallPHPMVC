@@ -24,7 +24,7 @@ class Index extends App {
 	 * parameter values are "123" for $arg and "456" for $arg2)
 	 */
 	function test($arg = null, $arg2 = null){
-		echo 'Test action. $arg: '.$arg . ' arg2: ' . $arg2;
+		echo 'Test action. $arg: '.$arg . ' arg2: ' . $arg2; // Boo, echoing in controller === bad. For demonstration only.
 	}
 
 	
