@@ -16,7 +16,7 @@
 -->
 </head>
 <body>
-	<h1>Howdy!</h1>
-	<p>This is an example template. Values set in the template can be loaded using the <code>$this->[param]</code> syntax.</p>
+	<h1><?php echo $this->greeting; ?></h1>
+	<p>This is an example template.</p>
 </body>
 </html>

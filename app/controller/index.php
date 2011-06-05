@@ -2,13 +2,21 @@
 /**
  * Example Index controller. This controller is loaded by default.
  */
+namespace Controller;
 
-class Controller_Index extends Controller_Base {
+use \SmallPHPMVC\Template;
+
+class Index extends App {
+
 	/**
 	 * Example action. The "index" action is executed by default.
 	 */
 	function index() {
-		$this->registry['template']->show('index');
+
+		$template = new Template('index');
+		$template->set('greeting', 'Howdy!');
+		$template->show();
+
 	}
 	
 	/**
@@ -18,4 +26,13 @@ class Controller_Index extends Controller_Base {
 	function test($arg = null, $arg2 = null){
 		echo 'Test action. $arg: '.$arg . ' arg2: ' . $arg2;
 	}
+
+	
+	/**
+	 * Only needed for the Index controller, since the index method acts like the PHP4 compatable constructor. 
+	 */
+	function __construct() {
+		parent::__construct();
+	}
+
 }

@@ -3,6 +3,7 @@
  * Contains the MVC_Template class
  * 
  */
+namespace SmallPHPMVC;
 
 /**
  * A simple template engine. 
@@ -13,13 +14,16 @@
  * 
  * @author David Lancea
  */
-class MVC_Template {
-	private $_registry;
+class Template {
 
-	function __construct() {
-		$this->_registry = MVC_Registry::getReg();
+	protected $__template_name = 'index';
+	
+	public function __construct($name = null){
+		if( $name ){
+			$this->__template_name = $name;
+		}
 	}
-
+	
 	/**
 	 * Sets variable used by the template.
 	 * 
@@ -29,7 +33,7 @@ class MVC_Template {
 	 */
 	function set($varname, $value, $overwrite=false) {
 		if (isset($this->$varname) == true AND $overwrite == false) {
-			throw new Exception ('Unable to set var `' . $varname . '`. Already set, and overwrite not allowed.');
+			throw new \Exception ('Unable to set var `' . $varname . '`. Already set, and overwrite not allowed.');
 		}
 
 		$this->$varname = $value;
@@ -46,14 +50,12 @@ class MVC_Template {
 
 	/**
 	 * Includes the template code into its own scope and and displays the template.
-	 * 
-	 * @param string $name 
 	 */
-	function show($name) {
-		$path = TEMPLATE_PATH . DIRSEP . $name . '.html.php';
+	function show() {
+		$path = VIEW_PATH . DIRSEP . $this->__template_name . '.html.php';
 
 		if (file_exists($path) == false) {
-			throw new Exception ('Template `' . $name . '` does not exist.' );
+			throw new \Exception ('Template `' . $this->__template_name . '` does not exist.' );
 		}
 
 		include ($path);		

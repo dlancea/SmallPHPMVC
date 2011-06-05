@@ -11,4 +11,6 @@
  * @package		Links
  */
 
-require '../../inc/bootstrap.php';
+require '../../lib/smallphpmvc/bootstrap.php';
+
+SmallPHPMVC\Bootstrap::initialize();

@@ -2,6 +2,7 @@
 /**
  * Contains MVC_Router class
  */
+namespace SmallPHPMVC;
 
 /**
  * Routes the execution of a page load to the appropreate controller method, based
@@ -9,7 +10,7 @@
  * 
  * @author David Lancea
  */
-Class MVC_Router {
+Class Router {
 
 	protected $get_var_name = 'url';
 	protected $controller_path = 'controller/';
@@ -32,7 +33,7 @@ Class MVC_Router {
 		$path .= DIRSEP;
 
 		if ( !is_dir($path) ) {
-			throw new Exception('Invalid controller path: `' . $path . '`');
+			throw new \Exception('Invalid controller path: `' . $path . '`');
 		}
 
 		$this->controller_path = $path;
@@ -53,13 +54,13 @@ Class MVC_Router {
 		}
 
 		// Always include base controller
-		require_once($this->controller_path . DIRSEP . 'base.php');
+		require_once($this->controller_path . 'app.php');
 
 		// Include the file
 		include_once($route['file']);
 
 		// Initiate the class
-		$class = 'Controller_' . $route['controller'];
+		$class = 'Controller\\' . $route['controller'];
 		$controller_obj = new $class();
 
 		// Action available?
@@ -68,7 +69,7 @@ Class MVC_Router {
 		}
 
 		// Check for number of arguments
-		$method = new ReflectionMethod($controller_obj, $route['action']);
+		$method = new \ReflectionMethod($controller_obj, $route['action']);
 		
 		$number_of_args = count($route['additional_arguments']);
 		if( $number_of_args < $method->getNumberOfRequiredParameters() ){

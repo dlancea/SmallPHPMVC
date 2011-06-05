@@ -3,6 +3,7 @@
  * Contains MVC_Registry class
  * 
  */
+namespace SmallPHPMVC;
 
 /**
  * A singleton registry class which can hold application-wide settings.
@@ -25,17 +26,19 @@
  * 
  * @author David Lancea
  */
-Class MVC_Registry Implements ArrayAccess {
+
+class Registry implements \ArrayAccess {
 	private $vars = array();
 	private static $instance = null;
 
-	function __construct() {
-	}
-
-	// Make this class a singleton
+	/**
+	 * Makes this class a singleton
+	 *
+	 * @return type 
+	 */
 	static function getReg(){
 		if(self::$instance == null){
-			self::$instance = new MVC_Registry();
+			self::$instance = new Registry();
 			return self::$instance;
 		}else{
 			return self::$instance;
@@ -44,7 +47,7 @@ Class MVC_Registry Implements ArrayAccess {
 
 	function set($key, $var) {
 		if (isset($this->vars[$key]) == true) {
-			throw new Exception('Unable to set var `' . $key . '`. Already set.');
+			throw new \Exception('Unable to set var `' . $key . '`. Already set.');
 		}
 
 		$this->vars[$key] = $var;
@@ -78,4 +81,5 @@ Class MVC_Registry Implements ArrayAccess {
 	function offsetUnset($offset) {
 		unset($this->vars[$offset]);
 	}
+	
 }
