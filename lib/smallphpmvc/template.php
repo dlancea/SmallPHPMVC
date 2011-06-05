@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains the MVC_Template class
+ * Contains the Template class
  * 
  */
 namespace SmallPHPMVC;
@@ -16,18 +16,19 @@ namespace SmallPHPMVC;
  */
 class Template {
 
-	protected $_template_name = 'index';
-	protected $_is_layout = false;
+	protected $_name = 'index';
+	protected $_layout = null;
 	
 	/**
 	 *
 	 * @param string $name Name of the template to load
 	 */
-	public function __construct($name = null, $is_layout = false){
+	public function __construct( $name = null ){
 		if( $name ){
-			$this->_template_name = $name;
+			$this->_name = $name;
 		}
-		$this->_is_layout = $is_layout;
+		
+		$this->_layout = new Layout();
 	}
 	
 	/**
@@ -54,27 +55,36 @@ class Template {
 		unset($this->$varname);
 	}
 
+	function getLayout(){
+		return $this->_layout;
+	}
+
+	function setLayout( Layout $layout ){
+		$this->_layout = $layout;
+	}
+	
 	/**
 	 * Includes the template code into its own scope and and displays the template.
 	 */
 	function show() {
-		$path = VIEW_PATH . DIRSEP . $this->_template_name . '.html.php';
+		$path = VIEW_PATH . DIRSEP . $this->_name . '.html.php';
 
 		if (file_exists($path) == false) {
-			throw new \Exception ('Template `' . $this->_template_name . '` does not exist.' );
+			throw new \Exception ('Template `' . $this->_name . '` does not exist.' );
 		}
 
-		// TODO, make layout class.
-		if( $this->_is_layout ){
+		// If there's no layout, simply include the template file and return.
+		if(!$this->_layout){
 			include ($path);
-		}else{
-			ob_start();
-			include ($path);
-			$template_output = ob_get_clean();
-			
-			$layout = new Template('layout/default', true);
-			$layout->set('content', $template_output);
-			$layout->show();			
+			return;
 		}
+		
+		ob_start();
+		include ($path);
+		$template_output = ob_get_clean();
+
+		$this->_layout->set('content', $template_output);
+		$this->_layout->show();
 	}
 }
+
