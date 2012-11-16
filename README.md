@@ -5,11 +5,12 @@ This is a small MVC framework I've been using on personal projects for a while. 
 
 I'd consider this code "alpha" so use at your own risk. I'll likely be adding and changing things around which are not backwards compatible. However, it's still a solid, unbloated framework for small apps, or a nice starting point for creating your own framework.
 
+To get started quickly there's an application template using this library located on GitHub here: https://github.com/dlancea/SmallPHPMVC-App-Template
+
 What's included?
 ----------------
 
 Only the actual library files. 
-
 
 * Registry, which provides system-wide configuration and resource access.
 * Bootsrap, which sets up path constants, sets up registry, and loads and runs Router
@@ -17,12 +18,6 @@ Only the actual library files.
 * BaseController, the abstract parent of all application controllers.
 * Template, which allows template files to be loaded with access to data specifically set in the class.
 * Layout, an extension of the Template class, is used to create site-wide layouts.
-
-There is also a Controller\App class in the app/controller directory, which should be the parent of any controller you might write.
-
-The application layout is already included, and follows framework conventions. The "app" directory contains your application specific code, the include folder contains a few setup settings, and lib contains the mvc classes themselves.
-
-Also included is an index controller, and an index template and layout. The index/index controller/action are the default route when nothing else is specified, so they are provided as an example, and to framework in action right from the get-go.
 
 As of now there is no "Model" part of the MVC provided. I've left it out because models can be so different app-to-app, and I didn't want to assume a simple CRUD interface for everything.
 
