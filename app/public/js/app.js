@@ -1,5 +1,0 @@
-/* 
- * Javascript applicable to application
- */
-
-

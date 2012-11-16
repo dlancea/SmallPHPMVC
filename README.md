@@ -8,7 +8,8 @@ I'd consider this code "alpha" so use at your own risk. I'll likely be adding an
 What's included?
 ----------------
 
-Essentially, the bulk of the code (and by bulk I mean a few hundred lines) is in the 5 library classes:
+Only the actual library files. 
+
 
 * Registry, which provides system-wide configuration and resource access.
 * Bootsrap, which sets up path constants, sets up registry, and loads and runs Router
