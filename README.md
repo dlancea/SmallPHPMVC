@@ -26,3 +26,4 @@ Todo
 
 * Make router HTTP-Request-Method-aware to allow for RESTful routing.
 * Unit testing
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/c892c2bee189072c2ab94c752bb6a81b "githalytics.com")](http://githalytics.com/dlancea/SmallPHPMVC)
